@@ -18,18 +18,18 @@ from services.achievement_engine import create_default_achievements
 # -----------------------------------------
 # A.4 — ENV (dev/prod) para ligar/desligar docs
 # -----------------------------------------
-ENV = os.getenv("ENV", "dev")  # dev | prod
+ENV = os.getenv("ENV", "dev").strip().lower()
 
-# -----------------------------------------
-# 1) Criar app primeiro (sem quebrar contratos)
-# -----------------------------------------
+disable_docs = os.getenv("DISABLE_DOCS", "0").strip() == "1"
+
 app = FastAPI(
     title="Discipline API",
     version="1.0",
-    docs_url=None if ENV == "prod" else "/docs",
-    redoc_url=None if ENV == "prod" else "/redoc",
-    openapi_url=None if ENV == "prod" else "/openapi.json",
+    docs_url=None if disable_docs else "/docs",
+    redoc_url=None if disable_docs else "/redoc",
+    openapi_url=None if disable_docs else "/openapi.json",
 )
+
 
 # -----------------------------------------
 # A.4 — Trusted Hosts (hardening mínimo)
